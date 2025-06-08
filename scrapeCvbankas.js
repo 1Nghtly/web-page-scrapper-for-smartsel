@@ -1,5 +1,6 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 
 const app = express();
 
@@ -13,17 +14,18 @@ app.get('/scrape', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1366,768']
+      executablePath: await chromium.executablePath(),
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      headless: chromium.headless,
     });
+
     const page = await browser.newPage();
 
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 Edg/96.0.1054.62');
 
     const query = `https://www.cvbankas.lt/?keyw=${encodeURIComponent(jobTitle)}&city=${encodeURIComponent(city)}`;
     await page.goto(query, { waitUntil: 'networkidle2', timeout: 30000 });
-
-    // Scraping logic here — same as your current scrape function, adapted for express
 
     const jobs = await page.evaluate(() => {
       const jobCards = Array.from(document.querySelectorAll('article, .list_article, .list_a, [class*="job-list"], .list_cell'));
@@ -57,4 +59,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
