@@ -1,6 +1,11 @@
 {
+  "name": "cv-scraper",
+  "version": "1.0.0",
+  "main": "scrapeCvbankas.js",
+  "scripts": {
+    "start": "node scrapeCvbankas.js"
+  },
   "dependencies": {
-    "pupeteer": "^0.0.1",
     "puppeteer": "^24.8.2",
     "vuetify": "^3.7.19"
   }
