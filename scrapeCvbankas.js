@@ -7,9 +7,7 @@ async function scrapeCvbankas(jobTitle, city) {
     // Launch browser with additional debug options
 const browser = await puppeteer.launch({
     headless: 'new',
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', // or wherever Chrome is installed
-    args: ['--window-size=1366,768', '--disable-features=site-per-process'],
-    userDataDir: 'C:/Users/YourUsername/puppeteer_cache'
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1366,768'],
 });
     
     const page = await browser.newPage();
